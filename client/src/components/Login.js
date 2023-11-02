@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import React, {  useState} from 'react';
 import { Link } from 'react-router-dom'; 
-
-const Login = () => {
+import { useNavigate } from "react-router-dom";
+const Login = ({onLogin}) => {
+  const navigate = useNavigate()
+  const [error,setError]=useState(null)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
+  function handleSubmit(e){
+    e.preventDefault()
+    fetch('http://localhost:5555/login',{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({email,password})
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        navigate('/blogs');
+      }else{
+        setError("Incorrect email or password. Please try again.");
+      } 
+    })
+    setEmail('')
+    setPassword('')
+  }
   return (
     <div className="login-container">
       <h2 className="login-title">Login</h2>
@@ -41,6 +57,7 @@ const Login = () => {
           Login
         </button>
       </form>
+      {error && <p className="error">{error}</p>}
       <p>
         Don't have an account? <Link to="/" className="registration-link">Register here</Link>
       </p>
