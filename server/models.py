@@ -3,21 +3,27 @@ from sqlalchemy_serializer import SerializerMixin
 
 from sqlalchemy.orm import validates
 from config import db, bcrypt
-
+from uuid import uuid4
+def get_uuid():
+    return uuid4().hex
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(32), primary_key=True,unique=True,default=get_uuid)
     username = db.Column(db.String, unique=True, nullable=False)
-    _password_hash = db.Column(db.String)
-    image_url = db.Column(db.String)
-    bio = db.Column(db.String)
+    email = db.Column(db.String(),unique =True,nullable=False)
+    _password_hash = db.Column(db.String,nullable=False)
+    # image_url = db.Column(db.String)
+    # bio = db.Column(db.String)
     #relationship
-    recipes = db.relationship('Blogs',backref= 'user')
+    blogs = db.relationship('Blogs',backref= 'user')
+
+    def __repr__(self):
+        return f'<The current user id {self.username}>'
 
     @hybrid_property
     def password_hash(self):
-        return self._password_hash
+        raise AttributeError("Password Hash Cannot Be Viewed")
     @password_hash.setter
     def password_hash(self,password):
         password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))

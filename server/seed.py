@@ -1,5 +1,5 @@
 
-from models import Blogs  # Import your Blogs model
+from models import Blogs,User
 from config import app,db
 # Sample data for blog posts
 sample_blogs = [
@@ -11,13 +11,10 @@ sample_blogs = [
     {
         "title": "Sample Blog 2",
         "content": "This is the content of the second blog post.",
-        "user_id": 1,  # Replace with the actual user ID
-    },
-    # Add more sample blog posts here
-]
-
-# Function to seed the database with sample blog posts
+        "user_id": 1, 
+    }]
 def seed_blogs():
+    
     for blog_data in sample_blogs:
         blog = Blogs(**blog_data)
         db.session.add(blog)
@@ -25,8 +22,9 @@ def seed_blogs():
     db.session.commit()
 
 if __name__ == "__main__":
-    # Initialize your Flask app and databas
 
     with app.app_context():
-        # Call the seed function to populate the database
+        Blogs.query.delete()
         seed_blogs()
+        User.query.delete()
+        db.session.commit()
