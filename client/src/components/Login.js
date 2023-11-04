@@ -1,30 +1,35 @@
-import React, {  useState} from 'react';
-import { Link } from 'react-router-dom'; 
-import { useNavigate } from "react-router-dom";
-const Login = ({onLogin}) => {
-  const navigate = useNavigate()
-  const [error,setError]=useState(null)
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+const Login = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  function handleSubmit(e){
-    e.preventDefault()
-    fetch('http://127.0.0.1:5555/login',{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    fetch('http://127.0.0.1:5555/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body:JSON.stringify({email,password})
+      body: JSON.stringify({ email, password }),
     })
-    .then((response) => {
-      if (response.status === 201) {
-        navigate('/blogs');
-      }else{
-        setError("Incorrect email or password. Please try again.");
-      } 
-    })
-    setEmail('')
-    setPassword('')
+      .then((response) => {
+        if (response.status === 201) {
+          // Login is successful, parse the user data from the response
+          navigate('/');
+          return response.json();
+        } else {
+          setError('Incorrect email or password. Please try again.');
+        }
+      })
+      setEmail('');
+      setPassword('');
   }
+
   return (
     <div className="login-container">
       <h2 className="login-title">Login</h2>
@@ -63,7 +68,6 @@ const Login = ({onLogin}) => {
       </p>
     </div>
   );
-  
 };
 
 export default Login;

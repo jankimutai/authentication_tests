@@ -14,7 +14,7 @@ db=SQLAlchemy()
 migrate = Migrate(app, db)
 
 db.init_app(app)
+# CORS(app)
 CORS(app)
 bcrypt = Bcrypt(app)
-
 api = Api(app)

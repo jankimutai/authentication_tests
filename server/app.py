@@ -5,7 +5,7 @@ from flask import make_response,jsonify,request,session
 
 @app.before_request
 def check_if_logged_in():
-    if not session.get("user_id") and request.endpoint not in ["login", "checksession"]:
+    if not session.get("user_id") and request.endpoint not in ["login", "checksession","registration"]:
         return make_response(jsonify({"error": "Unauthorized"}), 401)
 class Home(Resource):
     def get(self):
@@ -30,12 +30,13 @@ class RegistrationResource(Resource):
         password = data["password"]
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         if not username or not email or not password:
-            return jsonify({"message": "All fields must be filled"}), 400
+            return make_response(jsonify({"message": "All fields must be filled"}), 401)
         user_exists = User.query.filter(User.username == username).first() is not None
         if user_exists:
-            return jsonify({
-                "error":"User already exists",
-            })
+            return make_response(jsonify({"error": "Username already in use"}), 409)
+        email_exists = User.query.filter(User.email == email).first() is not None
+        if email_exists:
+            return make_response(jsonify({"error": "Email already in use"}),409)
         user = User(username=username,email=email,_password_hash=hashed_password)
         session['user_id']=user.id
         db.session.add(user)

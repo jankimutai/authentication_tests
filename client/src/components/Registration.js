@@ -10,7 +10,10 @@ function Registration(){
   const [password, setPassword] = useState('');
   function handleSubmit(e) {
     e.preventDefault();
-
+    if (!username || !email || !password) {
+      setError("All fields must be filled.");
+      return;
+    }
     fetch('http://localhost:5555/registration', {
       method: "POST",
       headers: {
@@ -23,6 +26,10 @@ function Registration(){
         setSuccess("Registration successful! You can now log in.");
         navigate("/login")
         setError(null);
+
+      }else if (response.status === 409) { 
+        setError("Username or email already in use. Please choose different credentials.");
+        setSuccess(null);
       } else if (response.status === 401) {
         setError("Invalid email or password. Please check your input.");
         setSuccess(null);
@@ -71,12 +78,12 @@ function Registration(){
             onChange={(e) => setPassword(e.target.value)}
             className="input"
           />
+          {success && <p className="success">{success}</p>}
+          {error && <p className="error">{error}</p>}
         </div>
         <button type="submit" className="submit-button">
           Register
         </button>
-        {success && <p className="success">{success}</p>}
-        {error && <p className="error">{error}</p>}
         <p>
           Don't have an account? <Link to="/login" className="registration-link">Login here</Link>
         </p>
