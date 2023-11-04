@@ -5,11 +5,16 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!email || !password) {
+      setError("All fields must be filled.");
+      return;
+    }
     fetch('http://127.0.0.1:5555/login', {
       method: 'POST',
       headers: {
@@ -19,11 +24,16 @@ const Login = () => {
     })
       .then((response) => {
         if (response.status === 201) {
-          // Login is successful, parse the user data from the response
+          setSuccess('Login successful');
+          setError(null);
           navigate('/');
           return response.json();
-        } else {
+        } else if (response.status === 401) {
           setError('Incorrect email or password. Please try again.');
+        } else if (response.status === 404) {
+          setError('User not found');
+        } else {
+          setError('An error occurred. Please try again later.');
         }
       })
       setEmail('');
@@ -63,6 +73,7 @@ const Login = () => {
         </button>
       </form>
       {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
       <p>
         Don't have an account? <Link to="/" className="registration-link">Register here</Link>
       </p>
