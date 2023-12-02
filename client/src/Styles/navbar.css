@@ -1,44 +1,59 @@
 /* navbar.css */
+
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    padding: 10px;
-    color: #fff;
-  }
-  
-  .nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  
-  .nav-list li {
-    margin-right: 20px;
-  }
-  
-  .nav-link {
-    text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-  }
-  
-  /* Add additional styling as needed */
-/* navbar.css */
+  background-color: #333;
+  padding: 10px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
 .user-profile-dropdown {
-    position: absolute;
-    top: 80px; /* Adjust the top position as needed */
-    right: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    display: none;
-    z-index: 1;
-    color: black;
-  }
-  
-  .user-profile-dropdown.show {
-    display: block;
-  }
-    
+  position: absolute;
+  top: 90px;
+  right: 0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
+  color:black;
+  margin-right: 10px;
+}
+
+.user-profile-dropdown.show {
+  display: block;
+}
+
+.user-icon {
+  font-size: 1.5em;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+/* Add any additional styling as needed */

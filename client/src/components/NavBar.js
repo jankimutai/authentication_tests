@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSignInAlt, faSignOutAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSignInAlt, faSignOutAlt, faUser, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../components/AuthContext';
-import UserProfile from './UserProfile'; // Import the UserProfile component
+import UserProfile from './UserProfile'; 
 import '../Styles/navbar.css';
 
 function Navbar() {
@@ -32,6 +32,11 @@ function Navbar() {
             <p>Welcome, {user.username}</p>
             {isProfileHovered && <UserProfile />}
           </div>
+          <>
+            <div className="user-icon" onMouseEnter={handleProfileMouseEnter} onMouseLeave={handleProfileMouseLeave}>
+              <FontAwesomeIcon icon={faUser} />
+            </div>
+          </>
         </div>
       ) : (
         <ul className="nav-list right">
