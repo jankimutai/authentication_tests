@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
+import Swal from 'sweetalert2';
+
 function Login({ handleLogIn }) {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,11 @@ function Login({ handleLogIn }) {
     e.preventDefault();
     setLoading(true);
     if (!email || !password) {
-      setError("All fields must be filled.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'All fields must be filled.',
+      });
       return;
     }
     fetch('http://127.0.0.1:5555/login', {
@@ -27,23 +31,37 @@ function Login({ handleLogIn }) {
     })
       .then((response) => {
         if (response.status === 201) {
-          setSuccess('Login successful');
-          setError(null);
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful',
+            text: 'You have successfully logged in!',
+          });
           setLoading(false);
           return response.json();
         } else if (response.status === 401) {
-          setError('Incorrect email or password. Please try again.');
+          Swal.fire({
+            icon: 'error',
+            title: 'Authentication Error',
+            text: 'Incorrect email or password. Please try again.',
+          });
           setLoading(false);
         } else if (response.status === 404) {
-          setError('User not found');
+          Swal.fire({
+            icon: 'error',
+            title: 'User Not Found',
+            text: 'User not found.',
+          });
           setLoading(false);
         } else {
-          setError('An error occurred. Please try again later.');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred. Please try again later.',
+          });
           setLoading(false);
         }
       })
       .then((userData) => {
-        // Move these inside the success block
         setEmail('');
         setPassword('');
         login(userData);
@@ -86,8 +104,6 @@ function Login({ handleLogIn }) {
           Login
         </button>
       </form>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
       <p>
         Don't have an account? <Link to="/register" className="registration-link">Register here</Link>
       </p>

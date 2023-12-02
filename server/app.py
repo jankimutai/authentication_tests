@@ -9,7 +9,7 @@ app.secret_key='qwwerrtyyu123'
 @app.before_request
 def check_if_logged_in():
     session.setdefault("user_id", None)
-    if not session["user_id"] and request.endpoint not in ['login', "session_user","logout"]:
+    if not session["user_id"] and request.endpoint not in ['login', "session_user","logout","registration"]:
         return {"error": "unauthorized"}, 401
 class Home(Resource):
     def get(self):
